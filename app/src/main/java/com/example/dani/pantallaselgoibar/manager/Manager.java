@@ -1,5 +1,9 @@
 package com.example.dani.pantallaselgoibar.manager;
 
+import android.content.Context;
+import android.support.v7.app.AppCompatActivity;
+
+import com.example.dani.pantallaselgoibar.classes.Machine;
 import com.example.dani.pantallaselgoibar.classes.Zone;
 
 import java.util.ArrayList;
@@ -9,18 +13,29 @@ import java.util.ArrayList;
  */
 
 public class Manager {
-    Utilities utilities;
+    private FrameManager frameManager;
+    private static Manager manager = new Manager();
+    private Manager() {
+        frameManager = new FrameManager();
+    }
 
-    public Manager() {
-        utilities = new Utilities();
+    public static Manager getInstance(){
+        return manager;
     }
 
     public ArrayList<Zone> getZones(){
-        ArrayList<Zone> zones = new ArrayList<>();
-        zones.add(new Zone("Conventional"));
-        zones.add(new Zone("Manufacturing"));
-        zones.add(new Zone("Didactics"));
-        zones.add(new Zone("Facilities"));
-        return zones;
+        return  Utilities.getZones();
+    }
+
+    public void switchMainFragment(AppCompatActivity activity, int fragmentTag, Object[] args){
+        frameManager.switchMainFragment(activity, fragmentTag, args);
+    }
+    public void switchMainFragment(AppCompatActivity activity, int fragmentTag){
+        this.switchMainFragment(activity, fragmentTag, null);
+    }
+    public Machine[] getMachines(String zone) {
+        Machine[] machines = Utilities.getMachines();
+
+        return machines;
     }
 }

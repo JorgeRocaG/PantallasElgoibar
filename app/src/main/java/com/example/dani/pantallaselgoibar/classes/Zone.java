@@ -1,5 +1,7 @@
 package com.example.dani.pantallaselgoibar.classes;
 
+import com.example.dani.pantallaselgoibar.manager.Utilities;
+
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -8,12 +10,13 @@ import java.util.Random;
  */
 
 public class Zone {
-    String name;
-    ArrayList<Machine> machines;
+    private String name;
+    private Machine[] machines;
 
 
     public Zone(String name) {
         this.name = name;
+        machines = Utilities.getMachines();
     }
 
     public String getName() {
@@ -21,15 +24,39 @@ public class Zone {
     }
 
     public int getWorkingMachines(){
-        Random rand = new Random();
-        return rand.nextInt(20);
+        int i = 0;
+
+        for (Machine machine:
+             machines) {
+            if(machine.getStatus() == Machine.STATUS_WORKING){
+                i++;
+            }
+        }
+
+        return i;
     }
     public int getHalfWorkingMachines(){
-        Random rand = new Random();
-        return rand.nextInt(20);
+        int i = 0;
+
+        for (Machine machine:
+                machines) {
+            if(machine.getStatus() == Machine.STATUS_HALF_WORKING){
+                i++;
+            }
+        }
+
+        return i;
     }
     public int getNotWorkingMachines(){
-        Random rand = new Random();
-        return rand.nextInt(20);
+        int i = 0;
+
+        for (Machine machine:
+                machines) {
+            if(machine.getStatus() == Machine.STATUS_NOT_WORKING){
+                i++;
+            }
+        }
+
+        return i;
     }
 }

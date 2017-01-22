@@ -1,10 +1,10 @@
 package com.example.dani.pantallaselgoibar.fragments;
 
-import android.app.Fragment;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,16 +12,16 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.dani.pantallaselgoibar.R;
+import com.example.dani.pantallaselgoibar.manager.Manager;
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link SectionFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
  * Use the {@link SectionFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SectionFragment extends Fragment {
+public class SectionFragment extends Fragment implements CardView.OnClickListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String NAME = "name";
@@ -34,7 +34,7 @@ public class SectionFragment extends Fragment {
     private int working;
     private int halfWorking;
     private int notWorking;
-
+    private String targetMachine;
     private OnFragmentInteractionListener mListener;
 
     public SectionFragment() {
@@ -45,8 +45,7 @@ public class SectionFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
+
      * @return A new instance of fragment SectionFragment.
      */
     // TODO: Rename and change types and number of parameters
@@ -57,6 +56,7 @@ public class SectionFragment extends Fragment {
         args.putInt(WORKING, working);
         args.putInt(HALF_WORKING, halfWorking);
         args.putInt(NOT_WORKING, notWorking);
+
         fragment.setArguments(args);
         return fragment;
     }
@@ -76,23 +76,24 @@ public class SectionFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        CardView cv = (CardView) inflater.inflate(R.layout.section_card, container, false);
-        ConstraintLayout cl = (ConstraintLayout)cv.findViewById(R.id.layoutSectionCard);
-        TextView tvZone = (TextView) cl.findViewById(R.id.tvZone);
-        TextView tvWorking = (TextView) cl.findViewById(R.id.tvWorkingNumber);
-        TextView tvHalhWorking = (TextView) cl.findViewById(R.id.tvHalfWorkingNumber);
-        TextView tvNotWorking = (TextView) cl.findViewById(R.id.tvNotWorkingNumber);
+        CardView cv = (CardView) inflater.inflate(R.layout.card_work_zone, container, false);
+        ConstraintLayout cl = (ConstraintLayout)cv.findViewById(R.id.layout);
+        TextView tvZone = (TextView) cl.findViewById(R.id.tv_work_zone);
+        TextView tvWorking = (TextView) cl.findViewById(R.id.tv_working);
+        TextView tvHalfWorking = (TextView) cl.findViewById(R.id.tv_half_working);
+        TextView tvNotWorking = (TextView) cl.findViewById(R.id.tv_not_working);
         tvZone.setText(name);
         tvWorking.setText(String.valueOf(working));
-        tvHalhWorking.setText(String.valueOf(halfWorking));
+        tvHalfWorking.setText(String.valueOf(halfWorking));
         tvNotWorking.setText(String.valueOf(notWorking));
+        cv.setOnClickListener(this);
         return cv;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+            //mListener.onFragmentInteraction(uri);
         }
     }
 
@@ -113,18 +114,17 @@ public class SectionFragment extends Fragment {
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+    @Override
+    public void onClick(View view) {
+        if(view instanceof CardView){
+            ConstraintLayout lay = (ConstraintLayout) view.findViewById(R.id.layout);
+            TextView tvName = (TextView) lay.findViewById(R.id.tv_work_zone);
+            targetMachine = tvName.getText().toString();
+            mListener.onFragmentClick(this);
+        }
+    }
+
+    public String getTargetMachine(){
+        return this.targetMachine;
     }
 }
